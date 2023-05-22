@@ -17,6 +17,8 @@ public class Application {
 
 		ProductService service = context.getBean(ProductService.class);
 
+		// This can be commented after the first run of the application
+		// else, data will be duplicated
 		service.addProducts(List.of(new Product("Type C", "Cable", "Black Drawer", 2024),
 				new Product("Mac Studio", "Computer", "White Table", 2025),
 				new Product("Focusrite Mixer", "Audio System", "White Table", 2025),
