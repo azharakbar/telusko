@@ -2,6 +2,7 @@ package com.azhar.SpringApp.services;
 
 import com.azhar.SpringApp.config.Database;
 import com.azhar.SpringApp.entities.Product;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +12,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-    @Autowired
-    Database db;
+    private final Database db;
 
     public void addProduct(Product p) {
         db.save(p);
@@ -28,12 +29,15 @@ public class ProductService {
         return db.findAll();
     }
 
-    public Optional<Product> getProductByName(String name) {
-        return db
-                .findAll()
-                .stream()
-                .filter(prod -> name.equalsIgnoreCase(prod.getName()))
-                .findFirst();
+    public Product getProductByName(String name) {
+        Optional<Product> products =
+                db
+                    .findAll()
+                    .stream()
+                    .filter(prod -> name.equalsIgnoreCase(prod.getName()))
+                    .findFirst();
+
+        return products.isPresent() ? products.get() : null;
     }
 
     public List<Product> getProductsWithText(String text) {
@@ -66,6 +70,24 @@ public class ProductService {
                 .stream()
                 .filter(prod -> prod.getWarranty() < currentYear)
                 .collect(Collectors.toList());
+    }
+
+    public void createDummyProducts() {
+        addProducts(List.of(new Product("Type C", "Cable", "Black Drawer", 2024),
+                new Product("Mac Studio", "Computer", "White Table", 2025),
+                new Product("Focusrite Mixer", "Audio System", "White Table", 2025),
+                new Product("Asus Vivobook", "Laptop", "Brown Drawer", 2021),
+                new Product("Asus Rog", "Laptop", "Black Table", 2021),
+                new Product("Macbook pro", "Laptop", "Brown Drawer", 2022),
+                new Product("Wacom Pad", "Writing Pad", "Black Drawer", 2020),
+                new Product("Apple Keyboard", "Keyboard", "White Table", 2022),
+                new Product("Logitech Keyboard", "Keyboard", "Black Table", 2024),
+                new Product("Hdmi cable", "Cable", "Black Drawer", 2024),
+                new Product("Java Black Book", "Cable", "Shelf", 2024),
+                new Product("Logi Mouse", "Mouse", "Black Table", 2022),
+                new Product("Apple Mouse", "Mouse", "White Table", 2022),
+                new Product("Lenovo Mouse", "Mouse", "Black Drawer", 2022),
+                new Product("BlackBeast", "Computer", "White Table", 2020)));
     }
 
 
